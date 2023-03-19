@@ -1,7 +1,6 @@
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
 
 public class GamePanel extends JPanel implements Runnable{
@@ -10,43 +9,67 @@ public class GamePanel extends JPanel implements Runnable{
     static final int game_Height = (int)(game_Width*(0.555));
     static final Dimension gameDimension = new Dimension(game_Width,game_Height);
     static final int paddleWidth = 20;
-    static final int paddleHeight = 200;
+    static final int paddleHeight = 100;
     Thread gameThread;
-    PongPaddle Player1;
-    PongPaddle Player2;
+    PongPaddle PlayerBlue;
+    PongPaddle PlayerRed;
     PongBall pongBall;
+    Graphics graphic;
+    Image image;
 
 
     GamePanel(){
 
-        //newPingPongPadles();
+        newPingPongPadles();
         this.setPreferredSize(gameDimension);
         this.setBackground(Color.black);
         this.setFocusable(true);
+        this.addKeyListener(new AllListeners());
 
         gameThread = new Thread(this);
         gameThread.start();
 
 
+
     }
 
- /*   private void newPingPongPadles() {
-        Player1 = new PongPaddle(0,(game_Height/2) - (paddleHeight/2),paddleWidth,paddleHeight,1);
+    private void newPingPongPadles() {
+        PlayerBlue = new PongPaddle(0,(game_Height/2) - (paddleHeight/2),paddleWidth,paddleHeight,1);
+        PlayerRed = new PongPaddle(game_Width-paddleWidth,(game_Height/2) - (paddleHeight/2),paddleWidth,paddleHeight,2);
     }
 
-    public void
+    public void paint(Graphics g){
+        image = createImage(game_Width,getHeight());
+        graphic = image.getGraphics();
+        draw(graphic);
+        g.drawImage(image,0,0,this);
+    }
 
+    public void draw(Graphics g){
+         PlayerBlue.draw(g);
+         PlayerRed.draw(g);
+    }
     public void move(){
-
+         PlayerBlue.move();
+         PlayerRed.move();
     }
     private void checkCollision(){
+        //ChecKing Paddle colliding with edges
+        if(PlayerBlue.y<0){
+            PlayerBlue.y = 0;
+        }else if(PlayerBlue.y> game_Height-paddleHeight){
+            PlayerBlue.y = game_Height-paddleHeight;
+        }
+        if (PlayerRed.y<0) {
+            PlayerRed.y = 0;
+        }else if(PlayerRed.y>game_Height-paddleHeight){
+            PlayerRed.y = game_Height-paddleHeight;
+        }
 
     }
 
-    public void repaint(){
 
-    }
-    */
+
 
     @Override
     public void run() {
@@ -59,14 +82,24 @@ public class GamePanel extends JPanel implements Runnable{
             delta += (currentTime - lastUpdate) / fps;
             lastUpdate = currentTime;
             if (delta>=1){
-               // move();
-                //checkCollision();
-                //repaint();
-                //delta--;
-                System.out.println("refresh");
+               move();
+                checkCollision();
+                repaint();
+                delta--;
+                //System.out.println("refresh");
             }
         }
     }
+    public class AllListeners extends KeyAdapter{
+          public void keyPressed(KeyEvent e){
+               PlayerBlue.keyPressed(e);
+               PlayerRed.keyPressed(e);
 
+          }
+          public void keyReleased(KeyEvent e){
+              PlayerBlue.KeyReleased(e);
+              PlayerRed.keyPressed(e);
+          }
+    }
 
 }
