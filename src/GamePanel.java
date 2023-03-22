@@ -10,6 +10,7 @@ public class GamePanel extends JPanel implements Runnable{
     static final Dimension gameDimension = new Dimension(game_Width,game_Height);
     static final int paddleWidth = 20;
     static final int paddleHeight = 100;
+    static final int ballDiameter = 20;
     Thread gameThread;
     PongPaddle PlayerBlue;
     PongPaddle PlayerRed;
@@ -21,6 +22,7 @@ public class GamePanel extends JPanel implements Runnable{
     GamePanel(){
 
         newPingPongPadles();
+        newPingPongBall();
         this.setPreferredSize(gameDimension);
         this.setBackground(Color.black);
         this.setFocusable(true);
@@ -31,6 +33,10 @@ public class GamePanel extends JPanel implements Runnable{
 
 
 
+    }
+
+    private void newPingPongBall() {
+        pongBall = new PongBall(game_Width/2,game_Height/2,ballDiameter);
     }
 
     private void newPingPongPadles() {
@@ -48,10 +54,12 @@ public class GamePanel extends JPanel implements Runnable{
     public void draw(Graphics g){
          PlayerBlue.draw(g);
          PlayerRed.draw(g);
+         pongBall.draw(g);
     }
     public void move(){
          PlayerBlue.move();
          PlayerRed.move();
+         pongBall.move();
     }
     private void checkCollision(){
         //ChecKing Paddle colliding with edges
@@ -64,6 +72,13 @@ public class GamePanel extends JPanel implements Runnable{
             PlayerRed.y = 0;
         }else if(PlayerRed.y>game_Height-paddleHeight){
             PlayerRed.y = game_Height-paddleHeight;
+        }
+
+        //Ball colliding with upper & Lower edges
+        if(pongBall.y<0){
+            pongBall.setYDirection(-pongBall.yVelocity);
+        } else if (pongBall.y>game_Height-ballDiameter) {
+            pongBall.setYDirection(-pongBall.yVelocity);
         }
 
     }
