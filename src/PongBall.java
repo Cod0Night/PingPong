@@ -7,8 +7,8 @@ public class PongBall extends Rectangle{
 
     int ballSpeed = 2;
     int diameter;
-    int xVelocity;
-    int yVelocity;
+    double xVelocity;
+    double yVelocity;
     Random random;
     PongBall(int x,int y,int ballDiameter){
         super(x,y,ballDiameter,ballDiameter);
@@ -27,10 +27,10 @@ public class PongBall extends Rectangle{
 
     }
 
-    public void setXDirection(int randomXDirection) {
+    public void setXDirection(double randomXDirection) {
         xVelocity = randomXDirection;
     }
-    public void setYDirection(int randomYDirection) {
+    public void setYDirection(double randomYDirection) {
         yVelocity = randomYDirection;
     }
     public void move() {

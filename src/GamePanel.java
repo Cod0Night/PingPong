@@ -80,16 +80,14 @@ public class GamePanel extends JPanel implements Runnable{
         } else if (pongBall.y>game_Height-ballDiameter) {
             pongBall.setYDirection(-pongBall.yVelocity);
         }
-        /*
+
         //When Ball collides with paddles
         if (pongBall.intersects(PlayerBlue)) {
-            pongBall.setYDirection(-pongBall.yVelocity);
-            pongBall.setXDirection(-pongBall.xVelocity);
+            pongBall.setXDirection(-pongBall.xVelocity*1.25);
         } else if (pongBall.intersects(PlayerRed)) {
-            pongBall.setYDirection(-pongBall.yVelocity);
-            pongBall.setXDirection(-pongBall.xVelocity);
+            pongBall.setXDirection(-pongBall.xVelocity*1.25);
         }
-        */
+
 
     }
 
