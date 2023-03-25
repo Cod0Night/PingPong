@@ -80,6 +80,16 @@ public class GamePanel extends JPanel implements Runnable{
         } else if (pongBall.y>game_Height-ballDiameter) {
             pongBall.setYDirection(-pongBall.yVelocity);
         }
+        /*
+        //When Ball collides with paddles
+        if (pongBall.intersects(PlayerBlue)) {
+            pongBall.setYDirection(-pongBall.yVelocity);
+            pongBall.setXDirection(-pongBall.xVelocity);
+        } else if (pongBall.intersects(PlayerRed)) {
+            pongBall.setYDirection(-pongBall.yVelocity);
+            pongBall.setXDirection(-pongBall.xVelocity);
+        }
+        */
 
     }
 
@@ -113,7 +123,7 @@ public class GamePanel extends JPanel implements Runnable{
           }
           public void keyReleased(KeyEvent e){
               PlayerBlue.KeyReleased(e);
-              PlayerRed.keyPressed(e);
+              PlayerRed.KeyReleased(e);
           }
     }
 

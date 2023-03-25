@@ -45,6 +45,13 @@ public class PongPaddle extends Rectangle{
                       setYDirection(0);
                     if(e.getKeyCode()==KeyEvent.VK_S)
                         setYDirection(0);
+                    break;
+
+            case 2: if(e.getKeyCode()==KeyEvent.VK_UP)
+                       setYDirection(0);
+                    if(e.getKeyCode()==KeyEvent.VK_DOWN)
+                       setYDirection(0);
+                    break;
         }
     }
 
