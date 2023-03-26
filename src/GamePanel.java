@@ -17,12 +17,16 @@ public class GamePanel extends JPanel implements Runnable{
     PongBall pongBall;
     Graphics graphic;
     Image image;
+    GameScore scoreCard;
+    Boolean pause;
 
 
     GamePanel(){
 
         newPingPongPadles();
         newPingPongBall();
+        newScoreCard();
+        this.pause=false;
         this.setPreferredSize(gameDimension);
         this.setBackground(Color.black);
         this.setFocusable(true);
@@ -33,6 +37,18 @@ public class GamePanel extends JPanel implements Runnable{
 
 
 
+    }
+
+    public void reset_Paused() {
+       //System.out.println("need a reset");
+       // gameThread.
+        pause=true;
+       // newPingPongBall();
+       // newPingPongPadles();
+        //newScoreCard();
+    }
+    private void newScoreCard() {
+        scoreCard = new GameScore(game_Width,game_Height);
     }
 
     private void newPingPongBall() {
@@ -55,6 +71,11 @@ public class GamePanel extends JPanel implements Runnable{
          PlayerBlue.draw(g);
          PlayerRed.draw(g);
          pongBall.draw(g);
+         scoreCard.draw(g);
+         if(scoreCard.drawWinner(g, gameThread)){
+             reset_Paused();
+         }
+
     }
     public void move(){
          PlayerBlue.move();
@@ -88,11 +109,24 @@ public class GamePanel extends JPanel implements Runnable{
             pongBall.setXDirection(-pongBall.xVelocity*1.25);
         }
 
-
+        //Ball collides with side edges and tally score.
+        if(pongBall.x<0){
+            scoreCard.player1Score++;
+            newPingPongBall();
+        } else if (pongBall.x>(game_Width+ballDiameter)) {
+            scoreCard.player2Score++;
+            newPingPongBall();
+        }
+        
+        //Winnner
+        if(scoreCard.player1Score==10){
+                scoreCard.winnerName ="Player Red Won";
+                scoreCard.winner = true;
+        } else if (scoreCard.player2Score==10) {
+                scoreCard.winnerName = "Player Blue Won";
+                scoreCard.winner = true;
+        }
     }
-
-
-
 
     @Override
     public void run() {
@@ -105,9 +139,11 @@ public class GamePanel extends JPanel implements Runnable{
             delta += (currentTime - lastUpdate) / fps;
             lastUpdate = currentTime;
             if (delta>=1){
-               move();
-                checkCollision();
-                repaint();
+                if(!pause) {
+                    move();
+                    checkCollision();
+                    repaint();
+                }
                 delta--;
                 //System.out.println("refresh");
             }
