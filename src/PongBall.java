@@ -1,8 +1,7 @@
 
 import java.awt.*;
-import java.awt.event.*;
 import java.util.*;
-import javax.swing.*;
+
 public class PongBall extends Rectangle{
 
     int ballSpeed = 2;

@@ -1,9 +1,7 @@
 
 import java.awt.*;
 import java.awt.event.*;
-import java.security.Key;
-import java.util.*;
-import javax.swing.*;
+
 public class PongPaddle extends Rectangle{
     int id;
     int yLocation;

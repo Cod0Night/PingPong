@@ -19,14 +19,17 @@ public class GamePanel extends JPanel implements Runnable{
     Image image;
     GameScore scoreCard;
     Boolean pause;
+    Boolean initCheck;
 
-
+    Font font;
     GamePanel(){
 
         newPingPongPadles();
         newPingPongBall();
         newScoreCard();
         this.pause=false;
+        this.initCheck = false;
+        font = new Font("Consolas", Font.BOLD, 20);
         this.setPreferredSize(gameDimension);
         this.setBackground(Color.black);
         this.setFocusable(true);
@@ -34,18 +37,13 @@ public class GamePanel extends JPanel implements Runnable{
 
         gameThread = new Thread(this);
         gameThread.start();
-
-
-
     }
 
-    public void reset_Paused() {
-       //System.out.println("need a reset");
-       // gameThread.
+    public void paused() {
         pause=true;
-       // newPingPongBall();
-       // newPingPongPadles();
-        //newScoreCard();
+    }
+    public void resume(){
+        pause = false;
     }
     private void newScoreCard() {
         scoreCard = new GameScore(game_Width,game_Height);
@@ -68,15 +66,28 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void draw(Graphics g){
-         PlayerBlue.draw(g);
-         PlayerRed.draw(g);
-         pongBall.draw(g);
-         scoreCard.draw(g);
-         if(scoreCard.drawWinner(g, gameThread)){
-             reset_Paused();
-         }
+        if(!initCheck){
+
+            g.setColor(Color.white);
+            g.setFont(font);
+            g.drawString("Press Enter to Start",(game_Width/2)-150,(game_Height/2));
+            g.drawString("Use Space for pause",(game_Width/2)-150,(game_Height/2)+30);
+            //System.out.println("i am in in");
+            //this.wait(3000);
+
+            paused();
+        }else {
+            PlayerBlue.draw(g);
+            PlayerRed.draw(g);
+            pongBall.draw(g);
+            scoreCard.draw(g);
+            if (scoreCard.drawWinner(g)) {
+                paused();
+            }
+        }
 
     }
+
     public void move(){
          PlayerBlue.move();
          PlayerRed.move();
@@ -119,15 +130,24 @@ public class GamePanel extends JPanel implements Runnable{
         }
         
         //Winnner
-        if(scoreCard.player1Score==10){
+        if(scoreCard.player1Score==2){
                 scoreCard.winnerName ="Player Red Won";
                 scoreCard.winner = true;
-        } else if (scoreCard.player2Score==10) {
+        } else if (scoreCard.player2Score==2) {
                 scoreCard.winnerName = "Player Blue Won";
                 scoreCard.winner = true;
         }
     }
 
+    private void pausedKeyPressed(KeyEvent e){
+       if(e.getKeyCode()==KeyEvent.VK_SPACE){
+           if(pause){
+               resume();
+           }else{
+               paused();
+           }
+       }
+    }
     @Override
     public void run() {
         long lastUpdate = System.currentTimeMillis();
@@ -153,12 +173,24 @@ public class GamePanel extends JPanel implements Runnable{
           public void keyPressed(KeyEvent e){
                PlayerBlue.keyPressed(e);
                PlayerRed.keyPressed(e);
+               pausedKeyPressed(e);
+               enterKeyPressed(e);
 
           }
           public void keyReleased(KeyEvent e){
               PlayerBlue.KeyReleased(e);
               PlayerRed.KeyReleased(e);
           }
+    }
+
+    private void enterKeyPressed(KeyEvent e) {
+        if(e.getKeyCode()==KeyEvent.VK_ENTER){
+            newPingPongPadles();
+            newPingPongBall();
+            newScoreCard();
+            this.pause=false;
+            this.initCheck=true;
+        }
     }
 
 }
