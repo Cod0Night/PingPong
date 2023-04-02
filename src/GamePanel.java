@@ -130,10 +130,10 @@ public class GamePanel extends JPanel implements Runnable{
         }
         
         //Winnner
-        if(scoreCard.player1Score==2){
+        if(scoreCard.player1Score==10){
                 scoreCard.winnerName ="Player Red Won";
                 scoreCard.winner = true;
-        } else if (scoreCard.player2Score==2) {
+        } else if (scoreCard.player2Score==10) {
                 scoreCard.winnerName = "Player Blue Won";
                 scoreCard.winner = true;
         }
